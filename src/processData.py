@@ -7,14 +7,15 @@ Clase general para el procesamiento de los datos almacenados en la base de datos
 '''
 import logging
 import findspark
-from pyspark.sql import SparkSession,SQLContext 
+from pyspark.sql import SparkSession, SQLContext 
 from pyspark import SparkConf
 import pyspark
 from common.SQLUtil import SQLUtil
 from pyspark.sql.functions import udf
 import datetime
 
-#Para lso nombres de las comunidades, si tienen coma, debemos pasar la cadena de después de la coma a 'antes', por ejemplo:
+
+# Para lso nombres de las comunidades, si tienen coma, debemos pasar la cadena de después de la coma a 'antes', por ejemplo:
 # Rioja, La pasa a ser La Rioja
 def transform_com_name(commName):
     x = commName.split(",")
@@ -23,11 +24,12 @@ def transform_com_name(commName):
     else:
         return (x[1] + " " + x[0]).strip()
 
+
 if __name__ == '__main__':
     logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s' , level=logging.INFO)
     
     findspark.init()
-    config  = SparkConf().setMaster("local") \
+    config = SparkConf().setMaster("local") \
                          .setAppName("TFMJfernandez")\
                          .set("spark.local.dir", "c:\\tmp\\")\
                          .set("spark.jars.packages", "org.mongodb.spark:mongo-spark-connector_2.11:2.4.1")
@@ -35,31 +37,31 @@ if __name__ == '__main__':
     sql = SQLContext(sc)
     spark = SparkSession(sc)
 
-#     df_cotizaciones = SQLUtil.readSparkDf(spark,"cotizaciones_empresas")  
-#     SQLUtil.writeSparkDf(df_cotizaciones, "cotizaciones", True)
-#     df_cotizaciones.unpersist(blocking = True)
-# 
-#     df_datos_covid = SQLUtil.readSparkDf(spark,"datos_covid")
-#     SQLUtil.writeSparkDf(df_datos_covid, "datos_covid", True)
-#     df_datos_covid.unpersist(blocking = True)
-#     
-#     df_datos_momo = SQLUtil.readSparkDf(spark,"datos_covid")
-#     SQLUtil.writeSparkDf(df_datos_covid, "datos_covid", True)
-#     df_datos_covid.unpersist(blocking = True)
-#     
-#     df_registro_defunciones = SQLUtil.readSparkDf(spark,"registro_defunciones") 
-#         
-#     from pyspark.sql.types import StringType
-#     udf_communityName = udf(transform_com_name, StringType())
-#     df_registro_defunciones = df_registro_defunciones.withColumn('comunidad', udf_communityName(df_registro_defunciones.comunidad))
-#     
-#     fecha_corte = datetime.date(2020,1,1)
-#     df_registro_defunciones = df_registro_defunciones.where(df_registro_defunciones.fecha_defuncion >= fecha_corte)
-# 
-#     SQLUtil.writeSparkDf(df_registro_defunciones, "registro_defunciones", True)
-#     df_registro_defunciones.unpersist(blocking = True)
+    df_cotizaciones = SQLUtil.readSparkDf(spark, "cotizaciones_empresas")  
+    SQLUtil.writeSparkDf(df_cotizaciones, "cotizaciones", True)
+    df_cotizaciones.unpersist(blocking=True)
+ 
+    df_datos_covid = SQLUtil.readSparkDf(spark, "datos_covid")
+    SQLUtil.writeSparkDf(df_datos_covid, "datos_covid", True)
+    df_datos_covid.unpersist(blocking=True)
+     
+    df_datos_momo = SQLUtil.readSparkDf(spark, "datos_covid")
+    SQLUtil.writeSparkDf(df_datos_covid, "datos_covid", True)
+    df_datos_covid.unpersist(blocking=True)
+     
+    df_registro_defunciones = SQLUtil.readSparkDf(spark, "registro_defunciones") 
+         
+    from pyspark.sql.types import StringType
+    udf_communityName = udf(transform_com_name, StringType())
+    df_registro_defunciones = df_registro_defunciones.withColumn('comunidad', udf_communityName(df_registro_defunciones.comunidad))
+     
+    fecha_corte = datetime.date(2020, 1, 1)
+    df_registro_defunciones = df_registro_defunciones.where(df_registro_defunciones.fecha_defuncion >= fecha_corte)
+ 
+    SQLUtil.writeSparkDf(df_registro_defunciones, "registro_defunciones", True)
+    df_registro_defunciones.unpersist(blocking=True)
 
-    df_datos_empleo_ine = spark.read.format("mongo").option("uri","mongodb://localhost/TFM_Jfernandez.EMPLEO_INE").load()
+    df_datos_empleo_ine = spark.read.format("mongo").option("uri", "mongodb://localhost/TFM_Jfernandez.EMPLEO_INE").load()
     df_datos_empleo_ine.registerTempTable("EMPLEO_INE")
    
     df_datos_empleo_ine_base = sql.sql('''
@@ -74,11 +76,10 @@ if __name__ == '__main__':
         WHERE Nombre like '%Dato base%'
         ''')
     
-    df_datos_empleo_ine_base.show(20,False)
+    df_datos_empleo_ine_base.show(20, False)
     SQLUtil.writeSparkDf(df_datos_empleo_ine_base, "datos_empleo_ine", True)
     
-    
-    df_datos_pernoc_ine = spark.read.format("mongo").option("uri","mongodb://localhost/TFM_Jfernandez.PERNOC_INE").load()
+    df_datos_pernoc_ine = spark.read.format("mongo").option("uri", "mongodb://localhost/TFM_Jfernandez.PERNOC_INE").load()
     df_datos_pernoc_ine.registerTempTable("PERNOC_INE")
    
     df_datos_pernoc_ine_base = sql.sql('''
@@ -92,11 +93,10 @@ if __name__ == '__main__':
              LATERAL VIEW explode(Data) as datos
         ''')
     
-    df_datos_pernoc_ine_base.show(20,False)
+    df_datos_pernoc_ine_base.show(20, False)
     SQLUtil.writeSparkDf(df_datos_pernoc_ine_base, "datos_pernoctaciones_ine", True)
     
-    
-    df_datos_PIB_ine = spark.read.format("mongo").option("uri","mongodb://localhost/TFM_Jfernandez.PIB_INE").load()
+    df_datos_PIB_ine = spark.read.format("mongo").option("uri", "mongodb://localhost/TFM_Jfernandez.PIB_INE").load()
     df_datos_PIB_ine.registerTempTable("PIB_INE")
    
     df_datos_PIB_ine_base = sql.sql('''
@@ -119,17 +119,6 @@ if __name__ == '__main__':
         WHERE Nombre like '%Datos ajustados%'
         ''')
     
-    df_datos_PIB_ine_base.show(20,False)
+    df_datos_PIB_ine_base.show(20, False)
     SQLUtil.writeSparkDf(df_datos_PIB_ine_base, "datos_pib_ine", True)
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
