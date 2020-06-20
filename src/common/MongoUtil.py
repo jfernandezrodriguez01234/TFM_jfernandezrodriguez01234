@@ -3,7 +3,6 @@ Created on 25 abr. 2020
 
 @author: jesus.fernandez
 '''
-import pandas as pd 
 from pymongo import MongoClient
 
 class MongoLoad(object):

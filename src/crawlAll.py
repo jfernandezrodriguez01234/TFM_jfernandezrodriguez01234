@@ -13,19 +13,19 @@ if __name__ == '__main__':
     worldCovidDataCrawler = WorldCovidDataCrawler()
     worldCovidDataCrawler.exec()
     logging.info('FIN del proceso de extracción de los datos médicos')
-     
+      
     logging.info('Inicio del proceso de extracción de los datos de tráfico de Madrid calle30')
     from crawlers.social.MadridCalle30Crawler import MadridCalle30Crawler
     madridCalle30Crawler = MadridCalle30Crawler()
     madridCalle30Crawler.exec()
     logging.info('FIN del proceso de extracción de los datos de tráfico de Madrid calle30')
-     
+      
     logging.info('Inicio del proceso de extracción del registro de defunciones del MOMO')
     from crawlers.social.RegistroDefuncionesCrawler import RegistroDefuncionesCrawler
     registroDefuncionesCrawler = RegistroDefuncionesCrawler()
     registroDefuncionesCrawler.exec()
     logging.info('FIN del proceso de extracción del registro de defunciones del MOMO')
-      
+       
     logging.info('Inicio del proceso de extracción de los valores del ibex35')
     from crawlers.economic.IBEX35DataCrawler import IBEX35DataCrawler
     IBEX35DataCrawler = IBEX35DataCrawler()
@@ -37,3 +37,16 @@ if __name__ == '__main__':
     INEDataCrawler = INEDataCrawler()
     INEDataCrawler.exec()
     logging.info('FIN del proceso de extracción de los valores de los datos del INE')
+   
+    logging.info('Inicio del proceso de extracción de los datos de comunidades autónomas')
+    from crawlers.general.CCAADataCrawler import CCAADataCrawler
+    CCAADataCrawler = CCAADataCrawler()
+    CCAADataCrawler.exec()
+    logging.info('FIN del proceso de extracción de los datos de comunidades autónomas')
+    
+    logging.info('Inicio del proceso de extracción de los valores de calidad del aire')
+    from crawlers.environment.EnvironmentDataCrawler import EnvironmentDataCrawler
+    EnvironmentDataCrawler = EnvironmentDataCrawler()
+    EnvironmentDataCrawler.exec()
+    logging.info('FIN del proceso de extracción de los valores de calidad del aire')
+    

@@ -28,7 +28,7 @@ class SQLUtil(object):
         "cotizaciones_empresas" : '''
             (select * from empresas_cotizacion ec 
             join cotizaciones_empresas ce on ec.id = ce.id_empresa
-            where ce.fecha >= '2019-01-01 00:00:00' ) cotizaciones
+            where ce.fecha >= '2015-01-01 00:00:00' ) cotizaciones
         ''',
         
         "datos_covid":'''
@@ -53,8 +53,27 @@ class SQLUtil(object):
             and nombre_sexo != 'todos'
             and nombre_gedad != 'todos'
         ) registro_defunciones
-        '''
+        ''',
 
+        "trafico_calle_30_madrid":'''
+        (select *
+            from trafico_calle_30_madrid 
+        ) trafico_calle_30_madrid
+        ''',
+        
+        "comunidades_autonomas":'''
+        (select *
+            from comunidades_autonomas 
+        ) comunidades_autonomas
+        ''',
+        "calidad_aire":'''
+        (select dca."PROVINCIA", dca."MUNICIPIO",dca."FECHA", dca."MEDIODA", ec.* from datos_diarios_calidad_aire dca
+        join estaciones_control ec on dca."ESTACION"= ec."CODIGO_CORTO"
+        where dca."MAGNITUD" = 8 
+        and dca."VALIDO" = true
+        ) calidad_aire
+        '''
+    
         }
     
     
