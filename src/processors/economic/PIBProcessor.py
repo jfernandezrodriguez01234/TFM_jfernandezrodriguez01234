@@ -79,8 +79,6 @@ class PIBProcessor(object):
         df_datos_PIB_ine_base = df_datos_PIB_ine_base\
             .select([column for column in df_datos_PIB_ine_base.columns if column not in columns_to_drop])\
             .where(df_datos_PIB_ine_base.tipo_dato == ' Datos ajustados de estacionalidad y calendario')
-            #.where(df_datos_PIB_ine_base.unidad == 'Euros')\
-            
         
         df_datos_PIB_ine_base.show(20, False)
         

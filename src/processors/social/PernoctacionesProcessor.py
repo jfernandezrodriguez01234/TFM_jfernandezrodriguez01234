@@ -3,8 +3,6 @@ Created on 25 abr. 2020
 
 @author: jesus.fernandez
 '''
-import datetime, time  
-import urllib.request
 from pyspark.sql.types import IntegerType
 from common.SQLUtil import SQLUtil
 from pyspark.sql.functions import split
@@ -13,11 +11,7 @@ class PernoctacionesProcessor(object):
     '''
     classdocs
     '''
-    #Declaraci�n de constantes
-    source_table = "defunciones_momo"
-    source_table_aux = "comunidades_autonomas"
-    
-    mapeo_codigos = 'resources/mapeo_comunidades.csv'
+    #Declaracion de constantes
         
     df = None
     spark = None
