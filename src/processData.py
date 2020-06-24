@@ -29,6 +29,7 @@ def closeAll(spark):
     spark.stop()
 
 if __name__ == '__main__':
+    
     fecha_corte, sc, spark, sql = initAll()
     
     logging.info('Inicio del procesado de los datos de registro de defunciones')
@@ -36,6 +37,12 @@ if __name__ == '__main__':
     rdp = RegistroDefuncionesProcessor(fecha_corte, spark, sc, sql)
     rdp.process()
     logging.info('FIN del procesado de extracción de los datos de registro de defunciones')
+    
+    logging.info('Inicio del procesado de los datos de cotizaciones de empresas del IBEX')
+    from processors.economic.IBEX35DataProcessor import IBEX35DataProcessor
+    i35 = IBEX35DataProcessor(spark, sc, sql)
+    i35.process()
+    logging.info('FIN del procesado de los datos de cotizaciones de empresas del IBEX')
 
     logging.info('Inicio del procesado de los datos de registro de pernoctaciones en establecimientos hoteleros')
     from processors.social.PernoctacionesProcessor import PernoctacionesProcessor

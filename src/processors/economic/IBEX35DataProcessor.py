@@ -18,7 +18,7 @@ class IBEX35DataProcessor(object):
     sc = None
     sql = None 
     
-    def __init__(self,fecha_corte, spark, sc, sql):
+    def __init__(self, spark, sc, sql):
         '''
         Constructor
         '''
